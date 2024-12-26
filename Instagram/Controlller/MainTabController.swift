@@ -14,7 +14,6 @@ class MainTabController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBar.tintColor = .black
         
         let layout = UICollectionViewFlowLayout()
         
@@ -24,10 +23,23 @@ class MainTabController: UITabBarController {
         
         let SearchVc = templateNavigationController(unselectedImage: UIImage(named: "search_unselected")!, selectedImage: UIImage(named: "search_selected")!, viewController: SearchViewController())
         
-        let NotificationVc = templateNavigationController(unselectedImage: UIImage(named: "like_unselected")!, selectedImage: UIImage(named: "like_selected")!, viewController: NotificationViewController())
+        let NotificationVc = templateNavigationController(
+            unselectedImage: UIImage(named: "like_unselected")!
+                                                        ,selectedImage: UIImage(named: "like_selected")!,
+                                                          viewController: NotificationViewController()
+)
         
-        let ProfileVc = templateNavigationController(unselectedImage: UIImage(named: "profile_unselected")!, selectedImage: UIImage(named: "profile_selected")!, viewController: ProfileViewController())
+        let profileLayout = UICollectionViewFlowLayout()
         
+        let ProfileVc = templateNavigationController(
+            unselectedImage: UIImage(named: "profile_unselected")!,
+            selectedImage: UIImage(named: "profile_selected")!,
+            viewController: ProfileViewController(collectionViewLayout: profileLayout)
+        )
+        
+        self.tabBar.tintColor = .label
+        self.tabBar.backgroundColor = .systemBackground
+        self.tabBar.unselectedItemTintColor = .label
         self.setViewControllers([FeedVc ,SearchVc , ImagePickerVc  , NotificationVc , ProfileVc], animated: true)
 
     }
@@ -37,9 +49,8 @@ class MainTabController: UITabBarController {
     private func templateNavigationController(unselectedImage:UIImage , selectedImage:UIImage , viewController:UIViewController) -> UINavigationController {
         
         viewController.tabBarItem = UITabBarItem(title: nil, image: unselectedImage, selectedImage: selectedImage)
-        
         let navVc = UINavigationController(rootViewController: viewController)
-        navVc.navigationBar.tintColor = .black
+        navVc.navigationBar.tintColor = .label
         return navVc
         
     }
