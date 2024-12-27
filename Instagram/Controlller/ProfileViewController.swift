@@ -12,8 +12,23 @@ class ProfileViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionViewConfiguration()
+    
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UserService.fetchUser { user in
+            self.user = user
+        }
+    }
+    
+    
+    var user:User? {
+        didSet {
+            navigationItem.title = user?.username
+            self.collectionView.reloadData()
+        }
+    }
     
     private func collectionViewConfiguration(){
         self.collectionView
@@ -73,6 +88,10 @@ extension ProfileViewController:UICollectionViewDelegateFlowLayout {
             return UICollectionReusableView()
         }
         
+        if let user = user {
+            header.headerVM = profileHeaderViewModel(user: user)
+        }
+        
         return header
     }
     
@@ -97,5 +116,6 @@ extension ProfileViewController:UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
     }
+    
     
 }

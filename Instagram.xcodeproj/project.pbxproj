@@ -17,6 +17,8 @@
 		2833E4C72D0D83BC00D1E4B3 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 2833E4C62D0D83BC00D1E4B3 /* FirebaseMessaging */; };
 		2833E4C92D0D83BC00D1E4B3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2833E4C82D0D83BC00D1E4B3 /* FirebaseStorage */; };
 		28A83D532CE7223900FD4E61 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 28A83D522CE7223900FD4E61 /* JGProgressHUD */; };
+		28B60B8E2D1EC6FC0007CA8B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 28B60B8D2D1EC6FC0007CA8B /* SDWebImage */; };
+		28B60B902D1EC6FC0007CA8B /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 28B60B8F2D1EC6FC0007CA8B /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +59,9 @@
 				2833E4C52D0D83BC00D1E4B3 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				2833E4BD2D0D83BC00D1E4B3 /* FirebaseCore in Frameworks */,
 				28A83D532CE7223900FD4E61 /* JGProgressHUD in Frameworks */,
+				28B60B8E2D1EC6FC0007CA8B /* SDWebImage in Frameworks */,
 				2833E4C12D0D83BC00D1E4B3 /* FirebaseFirestore in Frameworks */,
+				28B60B902D1EC6FC0007CA8B /* SDWebImageMapKit in Frameworks */,
 				2833E4C32D0D83BC00D1E4B3 /* FirebaseFirestoreCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +115,8 @@
 				2833E4C42D0D83BC00D1E4B3 /* FirebaseInAppMessaging-Beta */,
 				2833E4C62D0D83BC00D1E4B3 /* FirebaseMessaging */,
 				2833E4C82D0D83BC00D1E4B3 /* FirebaseStorage */,
+				28B60B8D2D1EC6FC0007CA8B /* SDWebImage */,
+				28B60B8F2D1EC6FC0007CA8B /* SDWebImageMapKit */,
 			);
 			productName = Instagram;
 			productReference = 285CCD822CE5D45700065C91 /* Instagram.app */;
@@ -143,6 +149,7 @@
 			packageReferences = (
 				28A83D512CE7223900FD4E61 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				2833E4B72D0D83BC00D1E4B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				28B60B8C2D1EC6FC0007CA8B /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 285CCD832CE5D45700065C91 /* Products */;
@@ -390,6 +397,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		28B60B8C2D1EC6FC0007CA8B /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/melvinmc720/SDWebImage.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -442,6 +457,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 28A83D512CE7223900FD4E61 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
 			productName = JGProgressHUD;
+		};
+		28B60B8D2D1EC6FC0007CA8B /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28B60B8C2D1EC6FC0007CA8B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		28B60B8F2D1EC6FC0007CA8B /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28B60B8C2D1EC6FC0007CA8B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
