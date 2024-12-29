@@ -21,7 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = UIWindow(windowScene: scene)
         self.window?.frame = UIScreen.main.bounds
-        print(Auth.auth().currentUser?.email)
         if Auth.auth().currentUser != nil {
             self.window?.rootViewController = MainTabController()
         }

@@ -27,6 +27,18 @@ struct signInModel{
 final class AuthService {
     
     
+    static func signout(completion:@escaping (Error?) -> Void){
+        do {
+            try Auth.auth().signOut()
+            completion(nil)
+        }
+        
+        catch let error {
+            completion(error)
+        }
+    }
+    
+    
     static func Signup(
         with credential: singupFormModel, completion: @escaping () -> Void
     ) {

@@ -7,14 +7,37 @@
 
 import UIKit
 
-class MainTabController: UITabBarController {
+protocol MainTabBarcontrollerDelegate:AnyObject {
+    func loginAuthentication()
+}
+
+class MainTabController: UITabBarController , MainTabBarcontrollerDelegate {
+    
+    func loginAuthentication() {
+        UserService.fetchUser { user in
+            self.user = user
+        }
+    }
+
     
     // - MARK: LifeCyle
     
+    var user:User? {
+        didSet{
+            guard let user = user else { return }
+            print("user is here \(user)")
+            configuration(with: user)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        UserService.fetchUser { user in
+            self.user = user
+        }
+    }
+    
+    private func configuration(with user:User){
         let layout = UICollectionViewFlowLayout()
         
         let FeedVc = templateNavigationController(unselectedImage: UIImage(named: "home_unselected")!, selectedImage: UIImage(named: "home_selected")!, viewController: FeedViewController(collectionViewLayout: layout))
@@ -34,14 +57,13 @@ class MainTabController: UITabBarController {
         let ProfileVc = templateNavigationController(
             unselectedImage: UIImage(named: "profile_unselected")!,
             selectedImage: UIImage(named: "profile_selected")!,
-            viewController: ProfileViewController(collectionViewLayout: profileLayout)
+            viewController: ProfileViewController(user: user)
         )
         
         self.tabBar.tintColor = .label
         self.tabBar.backgroundColor = .systemBackground
         self.tabBar.unselectedItemTintColor = .label
         self.setViewControllers([FeedVc ,SearchVc , ImagePickerVc  , NotificationVc , ProfileVc], animated: true)
-
     }
     
     // - MARK: Helper
@@ -54,6 +76,8 @@ class MainTabController: UITabBarController {
         return navVc
         
     }
+    
+    
 
 
 }

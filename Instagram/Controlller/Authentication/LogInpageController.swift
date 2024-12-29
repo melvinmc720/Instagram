@@ -11,7 +11,7 @@ class LogInpageController: UIViewController {
     
     
     private var ViewModel = LogInViewModel()
-    
+    weak var delegate:MainTabBarcontrollerDelegate?
     
     private var iconImage:UIImageView = {
         let iv = UIImageView()
@@ -99,14 +99,19 @@ class LogInpageController: UIViewController {
         }
         
         let credential = signInModel(email: email, password: password)
-        
         AuthService.SignIn(with: credential) {
+            self.delegate?.loginAuthentication()
             
             UIView
-                .transition(with: self.view.window!, duration: 0.5, options: .transitionFlipFromRight, animations: {
-                    // Set the new root view controller
-                    self.view.window?.rootViewController = MainTabController()
-                }, completion: nil)
+                .transition(
+with: self.view.window!,
+ duration: 0.5,
+options: .transitionFlipFromRight,
+animations: {
+    // Set the new root view controller
+    self.view.window?.rootViewController = MainTabController()
+                },
+ completion: nil)
         }
     }
     

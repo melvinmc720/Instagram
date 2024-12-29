@@ -9,26 +9,24 @@ import UIKit
 
 class ProfileViewController: UICollectionViewController {
     
+    var user:User
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionViewConfiguration()
     
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        UserService.fetchUser { user in
-            self.user = user
-        }
+    
+    init(user: User) {
+        self.user = user
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     
-    var user:User? {
-        didSet {
-            navigationItem.title = user?.username
-            self.collectionView.reloadData()
-        }
-    }
     
     private func collectionViewConfiguration(){
         self.collectionView
@@ -42,6 +40,8 @@ class ProfileViewController: UICollectionViewController {
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: ProfileHeaderView.identifier
             )
+        
+        navigationItem.title = user.username
     }
     
 
@@ -88,9 +88,7 @@ extension ProfileViewController:UICollectionViewDelegateFlowLayout {
             return UICollectionReusableView()
         }
         
-        if let user = user {
             header.headerVM = profileHeaderViewModel(user: user)
-        }
         
         return header
     }

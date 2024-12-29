@@ -21,6 +21,27 @@ class FeedViewController: UICollectionViewController {
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
         collectionView.backgroundColor = .white
         collectionView.showsVerticalScrollIndicator = false
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "logout",
+            style: .done,
+            target: self,
+            action: #selector(handleLogout)
+        )
+    }
+    
+    @objc func handleLogout(){
+        AuthService.signout { error in
+            guard error == nil else {
+                print("\(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            let vc = LogInpageController()
+            vc.delegate = self.tabBarController as? MainTabController
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.modalPresentationStyle = .fullScreen
+            self.present(navVC, animated: true)
+        }
     }
     
 

@@ -7,23 +7,61 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+
+    
+    var users: [User]? {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
+        }
+    }
+    
+    let searchController:UISearchController = UISearchController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        configuration()
+    
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func configuration(){
+        
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        self.searchController.delegate = self
+        self.searchController.searchResultsUpdater = self
+        self.searchController.searchBar.delegate = self
+        self.searchController.searchBar.placeholder = "Search..."
+        self.navigationItem.searchController = searchController
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.automaticallyShowsSearchResultsController = true
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
-    */
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        //
+    }
 
+}
+
+
+// MARK: TableView data source
+extension SearchViewController {
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "cell",
+            for: indexPath
+        )
+        cell.textLabel?.text = "cells"
+        return cell
+    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return users?.count ?? 0
+    }
 }
