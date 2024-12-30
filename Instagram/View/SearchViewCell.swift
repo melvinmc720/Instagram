@@ -6,10 +6,20 @@
 //
 
 import UIKit
-
+import SDWebImage
 class SearchViewCell: UITableViewCell {
-
     
+    var Viewmodel:UserCellViewModel? {
+        didSet{
+            guard let Viewmodel = Viewmodel else { return}
+            self.profileImage
+                .sd_setImage(with:URL(string: Viewmodel.profileImage))
+            self.usernameLabel.text = Viewmodel.username
+            self.fullNameLabel.text = Viewmodel.fullName
+        }
+    }
+
+    static let identifier:String = "SearchViewCell"
     let profileImage:UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleToFill
@@ -22,27 +32,62 @@ class SearchViewCell: UITableViewCell {
     
     let usernameLabel:UILabel = {
         let label = UILabel()
-        label.text = "usernameLabel"
-        label.textColor = .black
-        label.numberOfLines = 1
-        label.textAlignment = .left
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.text = "Venom"
+        
         return label
     }()
     let fullNameLabel:UILabel = {
         let label = UILabel()
-        label.text = "fullNameLabel"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.text = "Eddie Brock"
         label.textColor = .lightGray
-        label.numberOfLines = 1
-        label.textAlignment = .left
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.addSubview(profileImage)
+        profileImage.setDimensions(height: 60, width: 60)
+        profileImage.layer.cornerRadius = 30
+        profileImage.layer.masksToBounds = true
+        
+        profileImage
+            .centerY(
+                inView: self,
+                leftAnchor: leftAnchor,
+                paddingLeft: 12
+            )
+        
+       
+        let stack = UIStackView(
+            arrangedSubviews: [usernameLabel , fullNameLabel]
+        )
+        
+        stack.axis = .vertical
+        stack.distribution = .fillEqually
+        stack.alignment = .leading
+        stack.spacing = 4
+        
+        addSubview(stack)
+        
+        stack
+            .centerY(
+                inView: profileImage ,
+                leftAnchor: profileImage.rightAnchor ,
+                paddingLeft: 8
+            )
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
     }
     
     

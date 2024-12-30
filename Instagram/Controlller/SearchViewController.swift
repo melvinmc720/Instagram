@@ -19,18 +19,27 @@ class SearchViewController: UITableViewController, UISearchControllerDelegate, U
         }
     }
     
+    var filteredUsers:[User] = []
+    
+    var isSearching:Bool {
+        return searchController.isActive && !searchController.searchBar.text!.isEmpty
+    }
+    
     let searchController:UISearchController = UISearchController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configuration()
     
     }
     
     private func configuration(){
         
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView
+            .register(
+                SearchViewCell.self,
+                forCellReuseIdentifier:SearchViewCell.identifier
+            )
         
         self.searchController.delegate = self
         self.searchController.searchResultsUpdater = self
@@ -41,10 +50,36 @@ class SearchViewController: UITableViewController, UISearchControllerDelegate, U
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.automaticallyShowsSearchResultsController = true
         self.navigationItem.hidesSearchBarWhenScrolling = false
+        
+        self.tableView.rowHeight = 64
+        
+        UserService.fetchAllUsers { users in
+            self.users = users
+        }
+        
+        
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        //
+        guard let text = searchController.searchBar.text?.lowercased(),let AllUsers = users , !text.isEmpty  else {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            return
+        }
+        
+        filteredUsers = AllUsers.filter({ user in
+            user.username
+                .lowercased()
+                .contains(text) || user.fullname
+                .lowercased().contains(text)
+        })
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
+        
     }
 
 }
@@ -55,13 +90,29 @@ extension SearchViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: "cell",
+            withIdentifier: SearchViewCell.identifier,
             for: indexPath
-        )
-        cell.textLabel?.text = "cells"
+        ) as! SearchViewCell
+        
+        let user = isSearching ? filteredUsers[indexPath.row] : users?[indexPath.row]
+        cell.Viewmodel = UserCellViewModel(user: user)
         return cell
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users?.count ?? 0
+        return isSearching ? filteredUsers.count : users?.count ?? 0
+    }
+    
+    override func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let user = users?[indexPath.row] else { return}
+        
+        let vc = ProfileViewController(user: user)
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+        
     }
 }

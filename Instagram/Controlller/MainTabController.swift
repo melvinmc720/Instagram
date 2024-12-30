@@ -52,8 +52,6 @@ class MainTabController: UITabBarController , MainTabBarcontrollerDelegate {
                                                           viewController: NotificationViewController()
 )
         
-        let profileLayout = UICollectionViewFlowLayout()
-        
         let ProfileVc = templateNavigationController(
             unselectedImage: UIImage(named: "profile_unselected")!,
             selectedImage: UIImage(named: "profile_selected")!,
