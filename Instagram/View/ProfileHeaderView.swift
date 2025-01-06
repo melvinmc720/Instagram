@@ -8,10 +8,17 @@
 import UIKit
 import SDWebImage
 
+protocol ProfileHeaderDelegate:AnyObject {
+    func header(_ profileHeader:ProfileHeaderView , didTapActionButtonFor user:User)
+
+}
+
 class ProfileHeaderView: UICollectionReusableView {
     
     // MARK: - Properties
     static let identifier:String = "ProfileHeaderView"
+    
+    weak var delegate:ProfileHeaderDelegate?
     
     var headerVM:profileHeaderViewModel? {
         didSet{
@@ -108,6 +115,14 @@ class ProfileHeaderView: UICollectionReusableView {
         
         self.profileImageView.sd_setImage(with: viewmodel.profileImageURL)
         self.nameLabel.text = viewmodel.username
+        self.editProfileFollowButton.setTitle(viewmodel.followdButtonText, for: .normal)
+        self.editProfileFollowButton.setTitleColor(viewmodel.followButtonTextColor, for: .normal)
+        self.editProfileFollowButton.backgroundColor = viewmodel.followButtonBackgroundColor
+        
+        
+        self.followerLabel.attributedText = viewmodel.numberOfFollowers
+        self.followingLabel.attributedText = viewmodel.numberOfFollowing
+        self.postLable.attributedText = viewmodel.numberOfposts
     }
     
     override init(frame: CGRect) {
@@ -202,7 +217,10 @@ class ProfileHeaderView: UICollectionReusableView {
     // MARK: - Actions
     
     @objc func handleEditProfileFollowTapped() {
-        print("DEBUG: Handle edit profile tapped..")
+        guard let headerVM = headerVM else {
+            return
+        }
+        delegate?.header(self, didTapActionButtonFor: headerVM.user)
     }
     
     // MARK: Helper

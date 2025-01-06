@@ -13,7 +13,27 @@ class ProfileViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionViewConfiguration()
+        checkIfUserIsFollowed()
+        fetchUserStats()
+    }
     
+    private func checkIfUserIsFollowed(){
+        UserService.checkIfUserIsFollowed(uid: user.id) { isfollowed in
+            self.user.isFollowed = isfollowed
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    
+    private func fetchUserStats(){
+        UserService.fetchUserStats(uid: user.id) { userstats in
+            self.user.stats = userstats
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     
@@ -70,6 +90,41 @@ extension ProfileViewController{
     
 }
 
+// MARK: profileHeaderDelegate
+extension ProfileViewController:ProfileHeaderDelegate{
+    func header(_ profileHeader: ProfileHeaderView, didTapActionButtonFor user: User) {
+        if user.iscurrentUser{
+            print("DEBUG: Current user is in Action")
+        }
+        if user.isFollowed{
+            UserService.unfollow(uid: user.id) { error in
+                guard error == nil else {
+                    return
+                }
+                self.user.isFollowed = false
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+
+            }
+        }
+        else{
+            UserService.follow(uid: user.id) { error in
+                guard error == nil else {
+                    print("while following")
+                    return
+                }
+                self.user.isFollowed = true
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    
+}
+
 // MARK: COLLECTION VIEW DELEGATE
 
 extension ProfileViewController {
@@ -89,7 +144,7 @@ extension ProfileViewController:UICollectionViewDelegateFlowLayout {
         }
         
             header.headerVM = profileHeaderViewModel(user: user)
-        
+        header.delegate = self
         return header
     }
     
