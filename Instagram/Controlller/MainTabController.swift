@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import PhotosUI
 
 protocol MainTabBarcontrollerDelegate:AnyObject {
     func loginAuthentication()
 }
 
-class MainTabController: UITabBarController , MainTabBarcontrollerDelegate {
+class MainTabController: UITabBarController , MainTabBarcontrollerDelegate, PHPickerViewControllerDelegate {
+    
     
     func loginAuthentication() {
         UserService.fetchUser { user in
@@ -32,6 +34,7 @@ class MainTabController: UITabBarController , MainTabBarcontrollerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
         UserService.fetchUser { user in
             self.user = user
         }
@@ -75,7 +78,75 @@ class MainTabController: UITabBarController , MainTabBarcontrollerDelegate {
         
     }
     
+}
+
+
+// MARK: TabBar controller delegate
+
+extension MainTabController:UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let index = self.viewControllers?.firstIndex(of: viewController)
+        if index == 2{
+            presentPhotoPicker()
+        }
+        return true
+    }
     
+    func presentPhotoPicker() {
+           var config = PHPickerConfiguration(photoLibrary: .shared())
+           
+           // Allow both photos and videos
+           config.filter = .any(of: [.images, .videos])
+           
+           // Allow unlimited selections (0 = no limit)
+           config.selectionLimit = 1
+           
+           // Show the most recent photos first
+           config.preferredAssetRepresentationMode = .current
+           
+           // Show albums and smart albums
+           config.selection = .ordered
+           
+           // Include live photos
+           config.filter = .any(of: [.images, .livePhotos, .videos])
+           
+           let picker = PHPickerViewController(configuration: config)
+        picker.modalPresentationStyle = .fullScreen
+           picker.delegate = self
+           present(picker, animated: true)
+       }
+    
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        guard let result = results.first else {
+            return
+        }
+        
+        result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+            guard let image = image as? UIImage , error == nil else {
+                return
+            }
+            DispatchQueue.main.async {
+                let vc = UploadPostController()
+                vc.selectedImage = image
+                vc.delegate = self
+                vc.view.backgroundColor = .systemBackground
+                let navVC = UINavigationController(rootViewController: vc)
+                navVC.modalPresentationStyle = .fullScreen
+                self.present(navVC, animated: true)
+            }
+        }
+        
+    }
+    
+}
 
-
+extension MainTabController:uploadPostControllerDelegate {
+    func controllerdidfinishUploadingPhoto(_ controller: UploadPostController) {
+        self.selectedIndex = 0
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    
 }

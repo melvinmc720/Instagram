@@ -100,7 +100,7 @@ final class AuthService {
         }
     }
     
-    static private func uploadImage(
+    static  func uploadImage(
         image:UIImage ,
         completion: @escaping (String) -> Void
     ) {

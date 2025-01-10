@@ -6,10 +6,25 @@
 //
 
 import UIKit
-
+import SDWebImage
 class FeedCell: UICollectionViewCell {
     
     static let identifier:String = "FeedCell"
+    
+    var viewModel:PostViewModel? {
+        didSet{
+            configure()
+        }
+    }
+    
+    private func configure(){
+        guard let vm = viewModel else {return}
+        DispatchQueue.main.async {[self] in 
+            captionLable.text = vm.caption
+            postImageView.sd_setImage(with: vm.imageURL)
+        }
+      
+    }
     
     // - MARK: profileImageView
     private var profileImageView:UIImageView = {

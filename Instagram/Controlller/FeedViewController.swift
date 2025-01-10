@@ -14,8 +14,10 @@ class FeedViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         Setup()
+        fetchPosts()
     }
     
+    private var posts = [post]()
     
     private func Setup(){
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
@@ -44,6 +46,15 @@ class FeedViewController: UICollectionViewController {
         }
     }
     
+    func fetchPosts() {
+        PostService.fetchPosts { posts in
+            self.posts = posts
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
+    
 
 }
 
@@ -52,7 +63,7 @@ class FeedViewController: UICollectionViewController {
 extension FeedViewController{
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return self.posts.count
     }
     
     
@@ -61,7 +72,7 @@ extension FeedViewController{
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCell.identifier, for: indexPath) as? FeedCell else {
             return UICollectionViewCell()
         }
-    
+        cell.viewModel = PostViewModel(post:posts[indexPath.row])
         return cell
     }
 }
