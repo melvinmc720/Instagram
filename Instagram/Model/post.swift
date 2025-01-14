@@ -16,6 +16,8 @@ struct post:Codable {
     var ownerID:String
     var timestamp:Timestamp
     var postID:String
+    var ownerImageURL:String
+    var ownerUsername:String
     
     init(postID:String , dictionary:[String:Any]){
         self.postID = postID
@@ -24,5 +26,7 @@ struct post:Codable {
         self.imageURL = dictionary["imageURL"] as? String ?? " "
         self.ownerID = dictionary["ownerID"] as? String ?? " "
         self.timestamp = dictionary["timestamp"] as? Timestamp ?? Timestamp(date: Date())
+        self.ownerImageURL = dictionary["ownerImageURL"] as? String ?? ""
+        self.ownerUsername = dictionary["ownerUsername"] as? String ?? ""
     }
 }

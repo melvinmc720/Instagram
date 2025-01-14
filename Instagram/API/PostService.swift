@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseCore
 
 struct PostService {
-    static func UploadPost(caption:String , image:UIImage , completion:@escaping(FirestoreCompletion)){
+    static func UploadPost(caption:String , image:UIImage ,user:User, completion:@escaping(FirestoreCompletion)){
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -19,7 +19,9 @@ struct PostService {
                         "timestamp":Timestamp(date: Date()),
                         "likes":0,
                         "imageURL":imageURL,
-                        "ownerID":uid
+                        "ownerID":uid,
+                        "ownerImageURL":user.profileimage,
+                        "ownerUsername": user.username
             ] as [String:Any]
             COLLECTION_POSTS.addDocument(data: data, completion: completion)
         }

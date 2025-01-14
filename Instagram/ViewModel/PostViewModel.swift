@@ -14,12 +14,27 @@ struct PostViewModel:Codable {
         return URL(string: post.imageURL)
     }
     
+    var userProfileImage: URL? { return URL(string: post.ownerImageURL)}
+    
+    var username:String {
+        return post.ownerUsername
+    }
+    
     var caption:String {
         return post.caption
     }
     
     var likes:Int {
         return post.likes
+    }
+    
+    var likesTextLabel:String {
+        if post.likes != 1 {
+            return "\(post.likes) likes"
+        }
+        else {
+            return "\(post.likes) like"
+        }
     }
     
     

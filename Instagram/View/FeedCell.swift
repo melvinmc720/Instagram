@@ -22,6 +22,9 @@ class FeedCell: UICollectionViewCell {
         DispatchQueue.main.async {[self] in 
             captionLable.text = vm.caption
             postImageView.sd_setImage(with: vm.imageURL)
+            profileImageView.sd_setImage(with: vm.userProfileImage)
+            usernameButton.setTitle(vm.username, for: .normal)
+            LikeLable.text = vm.likesTextLabel
         }
       
     }
@@ -33,7 +36,7 @@ class FeedCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = UIImage(named: "venom-7")
+        iv.backgroundColor = .lightGray
         return iv
         
     }()
@@ -42,7 +45,6 @@ class FeedCell: UICollectionViewCell {
     private lazy var usernameButton:UIButton = {
         
         let button = UIButton(type: .system)
-        button.setTitle("Venom", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         button.addTarget(self, action: #selector(didTapUsername), for: .touchUpInside)
@@ -52,7 +54,6 @@ class FeedCell: UICollectionViewCell {
     // - MARK: postImageView
     private var  postImageView:UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "venom-7")
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv
@@ -89,7 +90,6 @@ class FeedCell: UICollectionViewCell {
     // - MARK: LikeLable
     private let LikeLable:UILabel = {
         let label = UILabel()
-        label.text = "1 like"
         label.font = UIFont.boldSystemFont(ofSize: 12)
         return label
     }()

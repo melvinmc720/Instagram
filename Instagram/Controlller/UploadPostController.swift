@@ -19,6 +19,12 @@ class UploadPostController: UIViewController {
         }
     }
     
+    var user:User? {
+        didSet{
+            
+        }
+    }
+    
     weak var delegate:uploadPostControllerDelegate?
 
     override func viewDidLoad() {
@@ -69,8 +75,10 @@ class UploadPostController: UIViewController {
     @objc func didTapDone() {
         guard let image = selectedImage else {return}
         guard let caption = captionTextView.text else { return}
+        guard let user = user else { return }
+        
         self.showLoader(true)
-        PostService.UploadPost(caption: caption, image: image) { error in
+        PostService.UploadPost(caption: caption, image: image, user: user) { error in
             self.showLoader(false)
             guard error == nil else{
                 print("DEBUG: Failed to upload the post, try again")

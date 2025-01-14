@@ -130,6 +130,7 @@ extension MainTabController:UITabBarControllerDelegate {
             DispatchQueue.main.async {
                 let vc = UploadPostController()
                 vc.selectedImage = image
+                vc.user = self.user
                 vc.delegate = self
                 vc.view.backgroundColor = .systemBackground
                 let navVC = UINavigationController(rootViewController: vc)
@@ -146,6 +147,14 @@ extension MainTabController:uploadPostControllerDelegate {
     func controllerdidfinishUploadingPhoto(_ controller: UploadPostController) {
         self.selectedIndex = 0
         controller.dismiss(animated: true, completion: nil)
+        guard let feednav = self.viewControllers?.first as? UINavigationController else {
+            return
+        }
+        
+        guard let feedvc = feednav.viewControllers.first as? FeedViewController else {
+            return
+        }
+        
     }
     
     
