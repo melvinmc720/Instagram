@@ -7,7 +7,7 @@
 
 import UIKit
 import PhotosUI
-
+import FirebaseAuth
 protocol MainTabBarcontrollerDelegate:AnyObject {
     func loginAuthentication()
 }
@@ -16,7 +16,8 @@ class MainTabController: UITabBarController , MainTabBarcontrollerDelegate, PHPi
     
     
     func loginAuthentication() {
-        UserService.fetchUser { user in
+        guard let uid = Auth.auth().currentUser?.uid else { return}
+        UserService.fetchUser(withUId: uid) { user in
             self.user = user
         }
     }
@@ -35,7 +36,8 @@ class MainTabController: UITabBarController , MainTabBarcontrollerDelegate, PHPi
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-        UserService.fetchUser { user in
+        guard let uid = Auth.auth().currentUser?.uid else { return}
+        UserService.fetchUser(withUId: uid) { user in
             self.user = user
         }
     }

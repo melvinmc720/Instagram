@@ -62,6 +62,8 @@ class CommentController: UICollectionViewController {
         self.collectionView.register(CommentCell.self, forCellWithReuseIdentifier: CommentCell.identifier)
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .interactive
+        
+        self.navigationItem.backButtonTitle = ""
     }
     
     // MARK: - API
@@ -87,8 +89,19 @@ extension CommentController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommentCell.identifier, for: indexPath) as? CommentCell else {return UICollectionViewCell()}
         
-        
+        cell.viewModel = CommentViewModel(comment: comments[indexPath.row])
         return cell
+    }
+}
+
+extension CommentController {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let uid = comments[indexPath.row].uid
+        UserService.fetchUser(withUId: uid) { user in
+            let controller = ProfileViewController(user: user)
+            self.navigationController?.pushViewController(controller , animated: true)
+        }
     }
 }
 
@@ -97,7 +110,10 @@ extension CommentController {
 extension CommentController:UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: 80)
+        
+        let viewModel = CommentViewModel(comment: comments[indexPath.row])
+        let height = viewModel.size(forWidth: self.view.frame.width).height + 32
+        return CGSize(width: self.view.frame.width, height: height)
     }
     
 }
