@@ -10,11 +10,14 @@ import UIKit
 class ProfileViewController: UICollectionViewController {
     
     var user:User
+    private var posts = [post]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionViewConfiguration()
         checkIfUserIsFollowed()
         fetchUserStats()
+        fetchPosts()
     }
     
     private func checkIfUserIsFollowed(){
@@ -47,8 +50,18 @@ class ProfileViewController: UICollectionViewController {
     }
     
     
+    private func fetchPosts(){
+        PostService.fetchPosts(forUser: user.id) { posts in
+            self.posts = posts
+            self.collectionView.reloadData()
+        }
+    }
+    
+    
     
     private func collectionViewConfiguration(){
+        
+        self.navigationItem.backButtonTitle = "Back"
         self.collectionView
             .register(
                 ProfileCellView.self,
@@ -72,7 +85,7 @@ class ProfileViewController: UICollectionViewController {
 extension ProfileViewController{
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
+        return self.posts.count
     }
     
     
@@ -83,6 +96,8 @@ extension ProfileViewController{
         ) as? ProfileCellView else {
             return UICollectionViewCell()
         }
+        
+        cell.viewModel = PostViewModel(post: posts[indexPath.row])
         
         return cell
     }
@@ -128,8 +143,17 @@ extension ProfileViewController:ProfileHeaderDelegate{
 // MARK: COLLECTION VIEW DELEGATE
 
 extension ProfileViewController {
-    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let controller  = FeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        controller.Post = posts[indexPath.row]
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
 }
+
+
 
 // MARK: COLLECTION HEADER
 extension ProfileViewController:UICollectionViewDelegateFlowLayout {

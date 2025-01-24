@@ -6,12 +6,22 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ProfileCellView: UICollectionViewCell {
     
     // MARK: - Properties
     
     static let identifier:String = "ProfileCellView"
+    
+    var viewModel:PostViewModel? {
+        didSet{
+            guard let vm = viewModel else {
+                return
+            }
+            configure(vm: vm)
+        }
+    }
     
     private let postImageView:UIImageView = {
         let iv = UIImageView()
@@ -32,6 +42,10 @@ class ProfileCellView: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure(vm:PostViewModel){
+        postImageView.sd_setImage(with: vm.imageURL)
     }
     
 }

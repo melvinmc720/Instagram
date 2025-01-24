@@ -8,7 +8,7 @@
 import Foundation
 
 struct PostViewModel:Codable {
-    private let post:post
+     let post:post
     
     var imageURL:URL? {
         return URL(string: post.imageURL)

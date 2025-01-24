@@ -92,8 +92,11 @@ struct UserService {
                     return
                 }
                 let following = snapshot.documents.count
-                print(UserStats(followers: followers, following: following))
-                compeltion(UserStats(followers: followers, following: following))
+                COLLECTION_POSTS.whereField("ownerID", isEqualTo: uid).getDocuments { snapshot, error in
+                    guard let snapshot = snapshot , error == nil else {return}
+                    compeltion(UserStats(followers: followers, following: following, posts: snapshot.documents.count))
+                }
+               
             }
         }
     }

@@ -155,6 +155,8 @@ extension MainTabController:uploadPostControllerDelegate {
             return
         }
         
+        feedvc.fetchPosts()
+        
     }
     
     

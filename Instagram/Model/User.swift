@@ -30,7 +30,7 @@ struct User{
         self.id = data["id"] as? String ?? ""
         self.profileimage = data["profileimage"] as? String ?? ""
         self.username = data["username"] as? String ?? ""
-        self.stats  = UserStats(followers: 0 , following: 0)
+        self.stats  = UserStats(followers: 0 , following: 0, posts: 0)
     }
 }
 
@@ -38,4 +38,5 @@ struct User{
 struct UserStats{
     let followers:Int
     let following:Int
+    let posts:Int
 }

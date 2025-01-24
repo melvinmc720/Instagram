@@ -35,7 +35,7 @@ struct profileHeaderViewModel{
     }
     
     var numberOfposts:NSAttributedString {
-        return attributedStatText(value: 5, label: "posts")
+        return attributedStatText(value: user.stats.posts, label: "posts")
     }
     
     var followButtonBackgroundColor:UIColor {
