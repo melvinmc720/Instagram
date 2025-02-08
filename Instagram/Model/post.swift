@@ -18,6 +18,7 @@ struct post:Codable {
     var postID:String
     var ownerImageURL:String
     var ownerUsername:String
+    var isLiked:Bool = false
     
     init(postID:String , dictionary:[String:Any]){
         self.postID = postID

@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import UIKit
 
 struct PostViewModel:Codable {
-     let post:post
+    var post:post
     
     var imageURL:URL? {
         return URL(string: post.imageURL)
@@ -26,6 +27,14 @@ struct PostViewModel:Codable {
     
     var likes:Int {
         return post.likes
+    }
+    
+    var likeButtonColor:UIColor {
+        return post.isLiked ? .red : .black
+    }
+    
+    var likeButtonImage:UIImage? {
+        return post.isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
     }
     
     var likesTextLabel:String {

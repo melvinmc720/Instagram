@@ -69,10 +69,21 @@ class FeedViewController: UICollectionViewController {
     func fetchPosts() {
         
         guard Post == nil else { return }
+        
         PostService.fetchPosts { posts in
+            
             self.posts = posts
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+            
+            self.posts.forEach { post in
+                
+                PostService.ispostLiked(post: post) { didlike in
+                    guard let index = self.posts.firstIndex(where: {$0.postID == post.postID}) else { return}
+                    
+                    self.posts[index].isLiked = didlike
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                }
             }
         }
     }
@@ -122,11 +133,36 @@ extension FeedViewController:UICollectionViewDelegateFlowLayout {
 
 
 extension FeedViewController:FeedCellDelegate {
+
     func cell(_ cell: FeedCell, wantsToshowCommentFor post: post) {
         let commentVC = CommentController(post: post)
         
         self.navigationController?.pushViewController(commentVC, animated: true)
     }
+    
+    func cell(_ cell: FeedCell, like post: post) {
+        
+        if post.isLiked {
+            cell.viewModel?.post.isLiked = false
+            PostService.didUnlikPost(post: post) { error in
+                guard error == nil else { return }
+                cell.viewModel?.post.likes = post.likes - 1
+                
+            }
+        } //If block
+        
+        else {
+            cell.viewModel?.post.isLiked = true
+            PostService.didLikePost(post: post) { error in
+                guard error == nil else { return }
+    
+                cell.viewModel?.post.likes = post.likes + 1
+            }
+        }// ELSE Block
+        
+        
+    }
+    
     
     
 }
