@@ -10,12 +10,28 @@ import UIKit
 class NotificationViewController: UITableViewController {
     
     // MARK: - Properties
-    
+    private var notifications = [Notification](){
+        didSet{
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configuration()
+        fetchNotifications()
+    }
+    
+    // MARK: - API
+    
+    func fetchNotifications(){
+        NotificationService.fetchNotification { notifications in
+            self.notifications = notifications
+            
+        }
     }
     
     // MARK: - Helpers
@@ -37,7 +53,7 @@ class NotificationViewController: UITableViewController {
 
 extension NotificationViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return self.notifications.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
@@ -45,7 +61,7 @@ extension NotificationViewController{
             for: indexPath
         ) as? NotificationCell else { return UITableViewCell()}
         
-
+        cell.viewModel = NotificationViewModel(notification: self.notifications[indexPath.row])
         return cell
     }
 }

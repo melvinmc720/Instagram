@@ -141,6 +141,8 @@ extension FeedViewController:FeedCellDelegate {
     }
     
     func cell(_ cell: FeedCell, like post: post) {
+        guard let tab = tabBarController as? MainTabController else { return}
+        guard let user = tab.user else { return}
         
         if post.isLiked {
             cell.viewModel?.post.isLiked = false
@@ -157,6 +159,7 @@ extension FeedViewController:FeedCellDelegate {
                 guard error == nil else { return }
     
                 cell.viewModel?.post.likes = post.likes + 1
+                NotificationService.uploadNotification(toUid: post.ownerID,fromUser: user, type: .like , post: post)
             }
         }// ELSE Block
         

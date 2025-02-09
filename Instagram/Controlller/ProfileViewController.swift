@@ -167,7 +167,7 @@ extension ProfileViewController:UICollectionViewDelegateFlowLayout {
             return UICollectionReusableView()
         }
         
-            header.headerVM = profileHeaderViewModel(user: user)
+        header.headerVM = profileHeaderViewModel(user: user)
         header.delegate = self
         return header
     }

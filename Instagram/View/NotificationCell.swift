@@ -12,6 +12,12 @@ class NotificationCell: UITableViewCell {
     static let identifier:String = "NotificationCell"
     
     // MARK: - Properties
+    
+    var viewModel:NotificationViewModel? {
+        didSet{
+            configure()
+        }
+    }
     private let profileImageView:UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "venom-7")
@@ -27,7 +33,7 @@ class NotificationCell: UITableViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .black
         label.textAlignment = .center
-        label.text = "venom"
+        label.numberOfLines = 0
         return label
     }()
     
@@ -126,6 +132,15 @@ class NotificationCell: UITableViewCell {
     
     @objc func handlePostTapped(){
         
+    }
+    
+    // MARK: - Helpers
+    func configure(){
+        guard let vm  = viewModel else { return}
+        profileImageView.sd_setImage(with: vm.profileImageUrl)
+        postImageView.sd_setImage(with: vm.postImageUrl)
+        
+        infoLabel.attributedText = vm.notificationMessage
     }
     
 }
