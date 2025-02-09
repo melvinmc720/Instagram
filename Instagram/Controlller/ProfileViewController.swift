@@ -108,6 +108,11 @@ extension ProfileViewController{
 // MARK: profileHeaderDelegate
 extension ProfileViewController:ProfileHeaderDelegate{
     func header(_ profileHeader: ProfileHeaderView, didTapActionButtonFor user: User) {
+        
+        guard let tab = self.tabBarController as? MainTabController else { return}
+        guard let currentUser = tab.user else { return}
+        
+        
         if user.iscurrentUser{
             print("DEBUG: Current user is in Action")
         }
@@ -130,6 +135,9 @@ extension ProfileViewController:ProfileHeaderDelegate{
                     return
                 }
                 self.user.isFollowed = true
+                NotificationService
+                    .uploadNotification(toUid: user.id, type: .follow)
+                
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
