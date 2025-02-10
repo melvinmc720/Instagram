@@ -93,4 +93,15 @@ struct PostService {
             
         }
     }
+    
+    static func fetchPost(withPostId postID: String , compeletion: @escaping (post) -> Void){
+        COLLECTION_POSTS.document(postID).getDocument { snapshot, error in
+            guard let snapshot = snapshot , error == nil else { return}
+            guard let data = snapshot.data() else { return}
+            
+            let post = post(postID: postID, dictionary: data)
+            
+            compeletion(post)
+        }
+    }
 }
