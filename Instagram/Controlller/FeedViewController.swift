@@ -16,12 +16,16 @@ class FeedViewController: UICollectionViewController {
         Setup()
         fetchPosts()
         
+        if Post != nil {
+            fetchPosts()
+        }
+        
     }
     
     private var posts = [post]()
     var Post:post? {
         didSet{
-            fetchPosts()
+            self.collectionView.reloadData()
         }
     }
     
@@ -76,7 +80,6 @@ class FeedViewController: UICollectionViewController {
         else {
             PostService.ispostLiked(post: Post!) { didlike in
                 self.Post?.isLiked = didlike
-                self.collectionView.reloadData()
             }
             
             return
@@ -161,7 +164,7 @@ extension FeedViewController:FeedCellDelegate {
             PostService.didUnlikPost(post: post) { error in
                 guard error == nil else { return }
                 cell.viewModel?.post.likes = post.likes - 1
-                
+            
             }
         } //If block
         
