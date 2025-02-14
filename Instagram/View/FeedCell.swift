@@ -37,6 +37,8 @@ class FeedCell: UICollectionViewCell {
             LikeButton.tintColor = vm.likeButtonColor
             LikeButton.setImage(vm.likeButtonImage, for: .normal)
             
+            postTimeLabel.text = vm.timeStampString
+            
         }
       
     }
