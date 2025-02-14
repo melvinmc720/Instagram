@@ -19,7 +19,11 @@ class FeedViewController: UICollectionViewController {
     }
     
     private var posts = [post]()
-    var Post:post?
+    var Post:post? {
+        didSet{
+            fetchPosts()
+        }
+    }
     
     private func Setup(){
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: FeedCell.identifier)
@@ -68,7 +72,15 @@ class FeedViewController: UICollectionViewController {
     // MARK: API
     func fetchPosts() {
         
-        guard Post == nil else { return }
+        guard Post == nil
+        else {
+            PostService.ispostLiked(post: Post!) { didlike in
+                self.Post?.isLiked = didlike
+                self.collectionView.reloadData()
+            }
+            
+            return
+        }
         
         PostService.fetchPosts { posts in
             

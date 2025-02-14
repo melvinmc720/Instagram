@@ -9,6 +9,7 @@ import FirebaseAuth
 import FirebaseStorage
 import UIKit
 import FirebaseFirestore
+import Firebase
 
 struct singupFormModel{
     var email:String
@@ -126,6 +127,11 @@ final class AuthService {
                 
             }
         }
+    }
+    
+    static func resetPassword(withEmail email:String , completion: @escaping FirestoreCompletion){
+        
+        Auth.auth().sendPasswordReset(withEmail: email , completion: completion)
     }
     
 }

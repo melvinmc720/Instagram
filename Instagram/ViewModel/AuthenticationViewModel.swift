@@ -51,3 +51,20 @@ struct RegisterationViewModel:AuthenticationProtocol{
         return !emailText.isEmpty && !PasswordText.isEmpty && !UsernameText.isEmpty && !FullNameText.isEmpty
     }
 }
+
+
+struct ResetPasswordViewModel:AuthenticationProtocol {
+    var EmailAddressText: String?
+    
+    var PasswordText: String?
+    
+    var isFormValid: Bool { return EmailAddressText?.isEmpty == false}
+    
+    var buttonBackgroundColor:UIColor { return isFormValid ? .purple : .systemPink}
+    
+    var buttonTitleColor:UIColor {
+        return isFormValid ? .white : UIColor(white: 1, alpha: 0.67)
+    }
+    
+    
+}

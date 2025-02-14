@@ -40,7 +40,7 @@ class LogInpageController: UIViewController {
     }()
     
     
-    private var LoginButton:UIButton = {
+    private lazy var LoginButton:UIButton = {
         let button = UIButton()
         button.setTitle("Login", for: .normal)
         button.backgroundColor = .systemPink
@@ -56,15 +56,16 @@ class LogInpageController: UIViewController {
     }()
     
     
-    private var ResetPassowordButton:UIButton = {
+    private lazy var ResetPassowordButton:UIButton = {
         let button = UIButton()
         button.attributedTitle(firstPart: "Forgot your password? ", secondPart: "Get help signing in")
+        button.addTarget(self, action: #selector(handleShowResetPassword), for: .touchUpInside)
         return button
         
     }()
     
     
-    private var SingupButton:UIButton = {
+    private lazy var SingupButton:UIButton = {
         let button = UIButton()
         button.attributedTitle(firstPart: "Don't have an account?  ", secondPart: "Sign Up")
         button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
@@ -124,6 +125,13 @@ animations: {
         }
         
         updateView()
+    }
+    
+    @objc func handleShowResetPassword(){
+        let controller = ResetPasswordViewController()
+        controller.delegate = self
+        controller.email = EmailTextField.text
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -220,3 +228,14 @@ extension LogInpageController:FormUpdateView {
 
     
 }
+
+extension LogInpageController:ResetPasswordControllerDelegate{
+    func controllerDidSendResetPasswordLink(_ controller: ResetPasswordViewController) {
+        controller.navigationController?.popViewController(animated: true)
+        self.showMessage(withTitle: "Success", message: "we sent a link to your email to reset your password")
+    }
+    
+    
+    
+}
+
